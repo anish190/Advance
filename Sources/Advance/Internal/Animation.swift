@@ -1,7 +1,9 @@
+import SwiftUI
+
 /// Interpolates between values over a specified duration.
 ///
 /// - parameter Value: The type of value to be animated.
-struct Animation<Value: VectorConvertible> {
+struct Animation<Value: Animatable> {
     
     /// The initial value at time 0.
     let from: Value

@@ -1,3 +1,5 @@
+import SwiftUI
+
 /// `Simulation` simulates changes to a value over time, based on
 /// a function that calculates acceleration after each time step.
 ///
@@ -10,7 +12,7 @@
 /// up" to the outside time. It then uses linear interpolation to match the
 /// internal state to the required external time in order to return the most
 /// precise calculations.
-struct Simulation<Value: VectorConvertible> {
+struct Simulation<Value: Animatable> {
     
 
     
@@ -151,7 +153,7 @@ struct Simulation<Value: VectorConvertible> {
 }
 
 
-fileprivate struct AnySimulationFunction<Value>: SimulationFunction where Value: VectorConvertible {
+fileprivate struct AnySimulationFunction<Value>: SimulationFunction where Value: Animatable {
     
     private let _acceleration: (Value.AnimatableData, Value.AnimatableData) -> Value.AnimatableData
     private let _convergence: (Value.AnimatableData, Value.AnimatableData) -> Convergence<Value>

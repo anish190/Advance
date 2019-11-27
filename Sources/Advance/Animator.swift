@@ -1,4 +1,5 @@
-import Foundation
+ import Foundation
+ import SwiftUI
 
 /// Manages the application of animations to a value.
 ///
@@ -18,7 +19,7 @@ import Foundation
 /// sizeAnimator.decay(drag: 2.0)
 /// ```
 ///
-public final class Animator<Value: VectorConvertible> {
+public final class Animator<Value: Animatable> {
     
     /// Called every time the animator's `value` changes.
     public var onChange: ((Value) -> Void)? = nil {
