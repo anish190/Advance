@@ -21,7 +21,7 @@
 /// sizeAnimator.decay(drag: 2.0)
 /// ```
 ///
-public final class Animator<Value: Animatable> {
+ public final class Animator<Value: Animatable>: ObservableObject {
     
     /// Called every time the animator's `value` changes.
     public var onChange: ((Value) -> Void)? = nil {
@@ -32,6 +32,7 @@ public final class Animator<Value: Animatable> {
         
     private var displayLinkCancellable: AnyCancellable? = nil
     
+    @Published
     private var state: State {
         didSet {
             dispatchPrecondition(condition: .onQueue(.main))
@@ -73,6 +74,12 @@ public final class Animator<Value: Animatable> {
             dispatchPrecondition(condition: .onQueue(.main))
             state = .atRest(value: newValue)
         }
+    }
+    
+    public var valuePublisher: AnyPublisher<Value, Never> {
+        $state
+            .map { $0.value }
+            .eraseToAnyPublisher()
     }
     
     /// The current velocity of the animator.
