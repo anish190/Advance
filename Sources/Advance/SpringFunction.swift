@@ -52,3 +52,15 @@ public struct SpringFunction<T>: SimulationFunction where T: Animatable {
     }
     
 }
+
+
+extension Animator {
+    public func spring(to value: Value, initialVelocity: Value? = nil, tension: Double, damping: Double, threshold: Double = 0.01) {
+        let spring = SpringFunction(target: value, tension: tension, damping: damping, threshold: threshold)
+        if let initialVelocity = initialVelocity {
+            simulate(using: spring, initialVelocity: initialVelocity)
+        } else {
+            simulate(using: spring)
+        }
+    }
+}
