@@ -13,9 +13,7 @@ import SwiftUI
 /// internal state to the required external time in order to return the most
 /// precise calculations.
 struct Simulation<Value: Animatable> {
-    
 
-    
     /// The function driving the simulation.
     private var function: AnySimulationFunction<Value> {
         didSet {

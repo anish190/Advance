@@ -15,14 +15,20 @@ let package = Package(
             name: "Advance",
             targets: ["Advance"]),
     ],
-    dependencies: [],
+    dependencies: [
+        .package(url: "git@github.com:timdonnelly/DisplayLink.git", from: "0.2.0")
+    ],
     targets: [
         .target(
             name: "Advance",
-            dependencies: []),
+            dependencies: [
+                "DisplayLink"
+            ]),
         .testTarget(
             name: "AdvanceTests",
-            dependencies: ["Advance"]),
+            dependencies: [
+                "Advance"
+            ]),
     ],
     swiftLanguageVersions: [.v5]
 )

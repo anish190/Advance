@@ -1,5 +1,7 @@
  import Foundation
  import SwiftUI
+ import DisplayLink
+ import Combine
 
 /// Manages the application of animations to a value.
 ///
@@ -27,13 +29,23 @@ public final class Animator<Value: Animatable> {
             dispatchPrecondition(condition: .onQueue(.main))
         }
     }
-    
-    private let displayLink = DisplayLink()
+        
+    private var displayLinkCancellable: AnyCancellable? = nil
     
     private var state: State {
         didSet {
             dispatchPrecondition(condition: .onQueue(.main))
-            displayLink.isPaused = state.isAtRest
+            if state.isAtRest {
+                displayLinkCancellable?.cancel()
+                displayLinkCancellable = nil
+            } else {
+                if displayLinkCancellable == nil {
+                    displayLinkCancellable = DisplayLink.shared.sink(receiveValue: { [weak self] frame in
+                        self?.advance(by: frame.duration)
+                    })
+                }
+            }
+            
             if state.value.animatableData != oldValue.value.animatableData {
                 onChange?(state.value)
             }
@@ -44,9 +56,6 @@ public final class Animator<Value: Animatable> {
     public init(initialValue: Value) {
         dispatchPrecondition(condition: .onQueue(.main))
         state = .atRest(value: initialValue)
-        displayLink.onFrame = { [weak self] (frame) in
-            self?.advance(by: frame.duration)
-        }
     }
     
     private func advance(by time: Double) {
